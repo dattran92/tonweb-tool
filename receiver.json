@@ -3,5 +3,10 @@
     "address": "UQDNwHrfmylvWBak3mR1OY8KExcF8LTleYoXutOEiu7HJ-F0",
     "amount": "600",
     "message": "gift"
+  },
+  {
+    "address": "UQDNwHrfmylvWBak3mR1OY8KExcF8LTleYoXutOEiu7HJ-F0",
+    "amount": "300",
+    "message": "gift"
   }
 ]

@@ -10,8 +10,8 @@ copy `.env.example` to `.env` and modify your variables
 MNEMONIC
 24 secret phase for your wallet
 
-JETTON_WALLET_ADDRESS
-Jetton contract address
+JETTON_MASTER_ADDRESS
+Jetton master address
 
 
 TON_CENTER_API_KEY
@@ -27,5 +27,5 @@ Copy `receiver.json` to anywhere you want `/tmp/receiver.json` and start adding 
 
 Command
 ```
-node bulk_transfer /tmp/receiver.json
+node bulk_transfer.mjs /tmp/receiver.json
 ```

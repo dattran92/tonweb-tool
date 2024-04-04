@@ -2,7 +2,7 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       MNEMONIC: string;
-      JETTON_WALLET_ADDRESS: string;
+      JETTON_MASTER_ADDRESS: string;
       TON_CENTER_API_KEY: string,
       NODE_ENV: 'development' | 'production';
     }

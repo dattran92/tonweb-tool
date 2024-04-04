@@ -3,6 +3,7 @@ import 'dotenv/config';
 import TonWeb from "tonweb";
 import tonwebMnemonic from 'tonweb-mnemonic';
 import fs from 'fs';
+import { delay } from './utils.mjs';
 
 const { JettonWallet} = TonWeb.token.jetton;
 const { mnemonicToSeed } = tonwebMnemonic
@@ -11,7 +12,7 @@ const jsonFileName = process.argv[2]
 const fileData = fs.readFileSync(jsonFileName, 'utf-8')
 const receiverList = JSON.parse(fileData)
 
-const JETTON_WALLET_ADDRESS = process.env.JETTON_WALLET_ADDRESS
+const JETTON_MASTER_ADDRESS = process.env.JETTON_MASTER_ADDRESS
 const TON_CENTER_API_KEY = process.env.TON_CENTER_API_KEY
 
 const tonweb = new TonWeb(
@@ -38,14 +39,21 @@ const init = async () => {
 }
 
 const transfer = async (
-  contractAddress,
   receiverAddress,
   amount,
   message = 'gift'
 ) => {
+  const jettonMinter = new TonWeb.token.jetton.JettonMinter(
+    tonweb.provider,
+    { address: JETTON_MASTER_ADDRESS }
+  );
+  const jettonWalletAddress = await jettonMinter.getJettonWalletAddress(new TonWeb.utils.Address(walletAddress));
   const jettonWallet = new JettonWallet(tonweb.provider, {
-    address: contractAddress
+    address: jettonWalletAddress
   });
+
+  console.log('Jetton wallet address:', jettonWalletAddress.toString(true, true, true));
+
   const seqno = (await wallet.methods.seqno().call()) || 0;
   console.log({seqno})
   // first four zero bytes are tag of text comment
@@ -60,7 +68,7 @@ const transfer = async (
     .methods
     .transfer({
         secretKey: keyPair.secretKey,
-        toAddress: contractAddress,
+        toAddress: jettonWalletAddress.toString(true, true, true),
         amount: TonWeb.utils.toNano('0.5'),
         seqno,
         payload,
@@ -75,7 +83,8 @@ const transfer = async (
   await init()
   for (const receiver of receiverList) {
     console.log(`transfering ${receiver.amount} to ${receiver.address}`)
-    const result = await transfer(JETTON_WALLET_ADDRESS, receiver.address, receiver.amount, receiver.message)
+    const result = await transfer(receiver.address, receiver.amount, receiver.message)
     console.log(result)
+    await delay(2000)
   }
 })()
