@@ -12,8 +12,14 @@ const fileData = fs.readFileSync(jsonFileName, 'utf-8')
 const receiverList = JSON.parse(fileData)
 
 const JETTON_WALLET_ADDRESS = process.env.JETTON_WALLET_ADDRESS
+const TONCENTER_API_KEY = process.env.TONCENTER_API_KEY
 
-const tonweb = new TonWeb(new TonWeb.HttpProvider('https://toncenter.com/api/v2/jsonRPC', { apiKey: 'a9d8c6c7da5cb03c6e988fc15ff9fbe8618bbe0f94252d5342f3fcdf54a171cb' }));
+const tonweb = new TonWeb(
+  new TonWeb.HttpProvider(
+    'https://toncenter.com/api/v2/jsonRPC',
+    { apiKey: TONCENTER_API_KEY }
+  )
+);
 
 let wallet
 let walletAddress
